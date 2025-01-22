@@ -4,13 +4,10 @@ console.log("working");
 // Attach an event listener to the form to prevent the default submission
 document.getElementById("signupForm").addEventListener("submit", validateForm);
 
-console.log('here 0');
-
 function validateForm(event){
   
   // Prevent the form from submitting and refreshing the page
   event.preventDefault();
-  console.log('here 00');
 
     var returnval = true;
 
@@ -21,8 +18,6 @@ function validateForm(event){
     var gender = document.getElementById('gender').value.trim();
     var password = document.getElementById('password').value.trim();
     var cpassword = document.getElementById('confirm_password').value.trim();
-
-    console.log('here 1');
 
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -57,11 +52,8 @@ function validateForm(event){
     }
 
     if( returnval == false ) {
-      console.log('here false');
-      //continue;
-      return false;
+      return ;
     }
-    console.log('par hoise');
 
     const form = document.getElementById('signupForm');
 
@@ -88,11 +80,24 @@ function validateForm(event){
     xhr.onload = function(){
       if ( this.readyState==4 && xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
+        const responseElement = document.getElementById('response');
+
+        if(response.status === 'success') {
+          responseElement.style.color = 'green';
+        }
+        else {
+          responseElement.style.color = 'red';
+        }
+
         document.getElementById('response').innerText = response.message;
+        
+        if(response.status === 'success') {
+          setTimeout(() => {
+            window.location.href = 'login.php';
+          }, 2000);
+        }
       } 
       else {
-          //document.getElementById('response').innerText = 'An error occurred!';
-
           console.error('Request Error:', {
             status: this.status,
             statusText: this.statusText,
@@ -102,15 +107,4 @@ function validateForm(event){
 
         }
       };
-/*
-      // Handle errors
-      xhr.onerror = function () {
-        document.getElementById('response').innerText = 'Request failed!';
-      };*/
-
-      // Send the request with JSON data
-      //xhr.send(JSON.stringify(data));
-      
-      //return true;
-      
 }

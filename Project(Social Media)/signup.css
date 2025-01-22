@@ -28,6 +28,10 @@ body {
     margin: 0;
   }
 
+  #response {
+    color: red;
+  }
+
   .login-btn {
     background-color: #FEBA02;
     border: none;

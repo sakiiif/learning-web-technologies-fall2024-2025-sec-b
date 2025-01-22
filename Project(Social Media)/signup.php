@@ -1,14 +1,12 @@
 
 <?php
 
-//header('Content-Type: application/json');
-
 session_start();
 require_once('usermodel.php');
 if (isset($_POST['login'])) {
   header("location: login.php");
 }
-//$_SERVER['REQUEST_METHOD'] === 'POST'  isset($_POST['submit'])
+
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 // Get the raw POST data
   $input = file_get_contents('php://input'); //**** 
@@ -18,12 +16,12 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
     // Check if the required fields are present
   if (isset($data['first_name']) && isset($data['last_name']) && isset($data['gender']) && isset($data['email']) && isset($data['password']) && isset($data['confirm_password']) ) {
-        $fname = htmlspecialchars($data['first_name']); // Sanitize input
-        $lname = htmlspecialchars($data['last_name']); // Sanitize input
+        $first_name = htmlspecialchars($data['first_name']); // Sanitize input
+        $last_name = htmlspecialchars($data['last_name']); // Sanitize input
         $gender = htmlspecialchars($data['gender']); // Sanitize input
         $email = htmlspecialchars($data['email']); // Sanitize input
-        $name = htmlspecialchars($data['password']); // Sanitize input
-        $name = htmlspecialchars($data['confirm_password']); // Sanitize input
+        $password = htmlspecialchars($data['password']); // Sanitize input
+        $confirm_password = htmlspecialchars($data['confirm_password']); // Sanitize input
 
         // Perform any additional processing (e.g., saving to a database)
         // For demonstration purposes, we return a success message
@@ -39,6 +37,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
             'status' => 'error',
             'message' => 'This Email is already registered! Provide a new one.',
           ]);
+          exit;
         }
         else {
           $status = addUser($first_name, $last_name, $user_id, $gender, $email, $password);
@@ -47,15 +46,14 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
               'status' => 'success',
               'message' => "Registration Successful!",
             ]);
-            header('location: login.php');
+            exit;
             } 
             else {
-              //echo "signed up!";
               echo json_encode([
                 'status' => 'error',
                 'message' => 'Some Error occured! Try agin..',
               ]);
-              header('location: signup.php');
+              exit;
             }
         }
     } 
@@ -65,6 +63,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
           'status' => 'error',
           'message' => 'Invalid input. Please provide all fields.',
       ]);
+      exit;
     }
 } 
 ?>
@@ -92,7 +91,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
     </header>
     <div class="signup-box">
-      <h3 id="response">dssdsd<h3>
+      <h3 id="response"><h3>
       <h2>Sign up To WebBook</h2>
       <form name="signupForm" id="signupForm" >
 
