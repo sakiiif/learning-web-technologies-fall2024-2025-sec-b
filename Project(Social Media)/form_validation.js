@@ -1,66 +1,116 @@
 
 console.log("working");
 
-function clearErrors(){
+// Attach an event listener to the form to prevent the default submission
+document.getElementById("signupForm").addEventListener("submit", validateForm);
 
-    errors = document.getElementsByClassName('formerror');
-    for(let item of errors)
-    {
-        item.innerHTML = "";
-    }
+console.log('here 0');
 
+function validateForm(event){
+  
+  // Prevent the form from submitting and refreshing the page
+  event.preventDefault();
+  console.log('here 00');
 
-}
-function seterror(id, error){
-    //sets error inside tag of id 
-    element = document.getElementById(id);
-    element.getElementsByClassName('formerror')[0].innerHTML = error;
-
-}
-
-function validateForm(){
     var returnval = true;
-    clearErrors();
 
     //perform validation and if validation fails, set the value of returnval to false
-    var fname = document.forms['signupForm']["ffirst_name"].value;
-    if (fname.length<5){
-        seterror("first_name", "*Length of name is too short");
-        returnval = false;
+    var fname = document.getElementById('first_name').value.trim();
+    var lname = document.getElementById('last_name').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var gender = document.getElementById('gender').value.trim();
+    var password = document.getElementById('password').value.trim();
+    var cpassword = document.getElementById('confirm_password').value.trim();
+
+    console.log('here 1');
+
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if( !fname || !lname || !email || !gender || !password || !cpassword ) {
+      alert('Please Fill up all the fields!');
+      returnval = false;
+    }
+    else if (!emailPattern.test(email)) {
+      alert('Please enter a valid email address!');
+      returnval = false;
+    }
+    else if (fname.length < 4 ) {
+      alert('First name must be at least 4 characters long.');
+      returnval = false;
+    }
+    else if (lname.length < 2 ) {
+      alert('Last name must be at least 2 characters long.');
+      returnval = false;
+    }
+    else if(password != cpassword) {
+      alert('Password and confirm password did not not match!');
+      returnval = false;
+    }
+    else if (password.length < 8 ) {
+      alert('Password must be at least 8 characters long.');
+      returnval = false;
+    }
+    else if (!passwordPattern.test(password)) {
+      alert('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
+      returnval = false;
     }
 
-    var lname = document.forms['signupForm']["flast_name"].value;
-    if (lname.length<5){
-        seterror("last_name", "*Length of name is too short");
-        returnval = false;
+    if( returnval == false ) {
+      console.log('here false');
+      //continue;
+      return false;
     }
+    console.log('par hoise');
 
-    var email = document.forms['signupForm']["femail"].value;
-    if (email.length>15){
-        seterror("email", "*Email length is too long");
-        returnval = false;
-    }
-    /*
-    var gender = document.forms['signupForm']["fgender"].value;
-    if (gender.length != 10){
-        seterror("gender", "*Phone number should be of 10 digits!");
-        returnval = false;
-    }*/
+    const form = document.getElementById('signupForm');
 
-    var password = document.forms['signupForm']["fpassword"].value;
-    if (password.length < 6){
+    // Create a FormData object from the form
+    const formData = new FormData(form);
 
-        // Quiz: create a logic to allow only those passwords which contain atleast one letter, one number and one special character and one uppercase letter
-        seterror("password", "*Password should be atleast 6 characters long!");
-        returnval = false;
-    }
+      // Convert the FormData to JSON
+    const data = {};
+    formData.forEach( (value, key) => {
+      data[key] = value;
+      console.log(key);
+      console.log(value);
+    });
 
-    var cpassword = document.forms['signupForm']["fconfirm_password"].value;
-    if (cpassword != password){
-        seterror("confirm_password", "*Password and Confirm password should match!");
-        returnval = false;
-    }
+      // Create a new XMLHttpRequest object
+    const xhr = new XMLHttpRequest();
 
-    return returnval;
+      // Set up the request
+    xhr.open('POST', 'signup.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(data));
+
+      // Handle the response
+    xhr.onload = function(){
+      if ( this.readyState==4 && xhr.status == 200) {
+        const response = JSON.parse(xhr.responseText);
+        document.getElementById('response').innerText = response.message;
+      } 
+      else {
+          //document.getElementById('response').innerText = 'An error occurred!';
+
+          console.error('Request Error:', {
+            status: this.status,
+            statusText: this.statusText,
+            responseText: this.responseText
+        });
+        document.getElementById('response').innerText = `Error occurred! Status: ${this.status}, Status Text: ${this.statusText}`;
+
+        }
+      };
+/*
+      // Handle errors
+      xhr.onerror = function () {
+        document.getElementById('response').innerText = 'Request failed!';
+      };*/
+
+      // Send the request with JSON data
+      //xhr.send(JSON.stringify(data));
+      
+      //return true;
+      
 }
-

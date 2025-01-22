@@ -1,49 +1,84 @@
+
 <?php
+
+//header('Content-Type: application/json');
+
 session_start();
 require_once('usermodel.php');
 if (isset($_POST['login'])) {
   header("location: login.php");
 }
+//$_SERVER['REQUEST_METHOD'] === 'POST'  isset($_POST['submit'])
+if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+// Get the raw POST data
+  $input = file_get_contents('php://input'); //**** 
 
-if (isset($_POST['submit'])) {
-  $first_name = trim($_POST['ffirst_name']);
-  $last_name = trim($_POST['flast_name']);
-  $gender = trim($_POST['fgender']);
-  $email = trim($_POST['femail']);
-  $password = trim($_POST['fpassword']);
-  $confirm_password = trim($_POST['fconfirm_password']);
+    // Decode the JSON data
+  $data = json_decode($input, true);
 
-  if ($password !== $confirm_password) {
-    echo "Passwords do not match.";
-  } else {
-    $user_id = rand(1, 100000000);
-    while (!isunique($user_id)) {
-      $user_id = rand(1, 100000000);
+    // Check if the required fields are present
+  if (isset($data['first_name']) && isset($data['last_name']) && isset($data['gender']) && isset($data['email']) && isset($data['password']) && isset($data['confirm_password']) ) {
+        $fname = htmlspecialchars($data['first_name']); // Sanitize input
+        $lname = htmlspecialchars($data['last_name']); // Sanitize input
+        $gender = htmlspecialchars($data['gender']); // Sanitize input
+        $email = htmlspecialchars($data['email']); // Sanitize input
+        $name = htmlspecialchars($data['password']); // Sanitize input
+        $name = htmlspecialchars($data['confirm_password']); // Sanitize input
+
+        // Perform any additional processing (e.g., saving to a database)
+        // For demonstration purposes, we return a success message
+
+        $user_id = rand(1, 100000000);
+        while (!isunique($user_id)) {
+          $user_id = rand(1, 100000000);
+        }
+
+        if (!isunique_email($email)) {
+          //echo "This Email is already registered";
+          echo json_encode([
+            'status' => 'error',
+            'message' => 'This Email is already registered! Provide a new one.',
+          ]);
+        }
+        else {
+          $status = addUser($first_name, $last_name, $user_id, $gender, $email, $password);
+          if ($status) {
+            echo json_encode([
+              'status' => 'success',
+              'message' => "Registration Successful!",
+            ]);
+            header('location: login.php');
+            } 
+            else {
+              //echo "signed up!";
+              echo json_encode([
+                'status' => 'error',
+                'message' => 'Some Error occured! Try agin..',
+              ]);
+              header('location: signup.php');
+            }
+        }
+    } 
+    else {
+        // If required fields are missing, return an error response
+      echo json_encode([
+          'status' => 'error',
+          'message' => 'Invalid input. Please provide all fields.',
+      ]);
     }
-
-    if (!isunique_email($email)) {
-      echo "This Email is already registered";
-    } else {
-      $status = addUser($first_name, $last_name, $user_id, $gender, $email, $password);
-      if ($status) {
-        header('location: login.php');
-      } else {
-        echo "signed up!";
-        //header('location: signup.php');
-      }
-    }
-  }
-}
-
+} 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebBook Sign Up</title>
+  
   <link rel="stylesheet" href="signup.css">
 </head>
 
@@ -57,39 +92,28 @@ if (isset($_POST['submit'])) {
 
     </header>
     <div class="signup-box">
+      <h3 id="response">dssdsd<h3>
       <h2>Sign up To WebBook</h2>
-      <form action="" name="signupForm" onsubmit="return validateForm()" method="POST">
+      <form name="signupForm" id="signupForm" >
 
-        <div class="formdesign" id="first_name">
-          <input type="text" name="ffirst_name" placeholder="First Name" required><br><b><span class="formerror"> </span></b>
-        </div>
-        
-        <div class="formdesign" id="last_name">
-          <input type="text" name="flast_name" placeholder="Last Name" required><br><b><span class="formerror"> </span></b>
-        </div>
+        <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
+
+        <input type="text" id="last_name" name="last_name" placeholder="Last Name" required>
 
         <label for="gender">Gender:</label>
-        <div class="formdesign" id="gender">
-          <select name="fgender" required>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-          </select>
-          <br><b><span class="formerror"> </span></b>
-        </div>
+        <select id="gender" name="gender" required>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
 
-        <div class="formdesign" id="email">
-          <input type="email" name="femail" placeholder="Email" required><br><b><span class="formerror"> </span></b>
-        </div>
+        <input type="email" id="email" name="email" placeholder="Email" required>
 
-        <div class="formdesign" id="password">
-          <input type="password" name="fpassword" placeholder="Password" required><br><b><span class="formerror"> </span></b>
-        </div>
+        <input type="password" id="password" name="password" placeholder="Password" required>
 
-        <div class="formdesign" id="confirm_password">
-          <input type="password" name="fconfirm_password" placeholder="Confirm Password" required><br><b><span class="formerror"> </span></b>
-        </div>
+        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
 
+      <!--  <input type="submit" name="submit" class="signup-btn" value="Sign Up"> -->
         <button type="submit" name="submit" class="signup-btn">Sign Up</button>
 
       </form>
