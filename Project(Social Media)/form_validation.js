@@ -1,17 +1,14 @@
 
-console.log("working");
+//console.log("working");
 
-// Attach an event listener to the form to prevent the default submission
 document.getElementById("signupForm").addEventListener("submit", validateForm);
 
 function validateForm(event){
   
-  // Prevent the form from submitting and refreshing the page
   event.preventDefault();
 
     var returnval = true;
 
-    //perform validation and if validation fails, set the value of returnval to false
     var fname = document.getElementById('first_name').value.trim();
     var lname = document.getElementById('last_name').value.trim();
     var email = document.getElementById('email').value.trim();
@@ -57,10 +54,8 @@ function validateForm(event){
 
     const form = document.getElementById('signupForm');
 
-    // Create a FormData object from the form
     const formData = new FormData(form);
 
-      // Convert the FormData to JSON
     const data = {};
     formData.forEach( (value, key) => {
       data[key] = value;
@@ -68,15 +63,12 @@ function validateForm(event){
       console.log(value);
     });
 
-      // Create a new XMLHttpRequest object
     const xhr = new XMLHttpRequest();
 
-      // Set up the request
     xhr.open('POST', 'signup.php', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(data));
 
-      // Handle the response
     xhr.onload = function(){
       if ( this.readyState==4 && xhr.status == 200) {
         const response = JSON.parse(xhr.responseText);
@@ -90,7 +82,7 @@ function validateForm(event){
         }
 
         document.getElementById('response').innerText = response.message;
-        
+
         if(response.status === 'success') {
           setTimeout(() => {
             window.location.href = 'login.php';

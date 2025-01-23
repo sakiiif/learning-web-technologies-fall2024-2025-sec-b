@@ -8,23 +8,18 @@ if (isset($_POST['login'])) {
 }
 
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
-// Get the raw POST data
+
   $input = file_get_contents('php://input'); //**** 
 
-    // Decode the JSON data
   $data = json_decode($input, true);
 
-    // Check if the required fields are present
   if (isset($data['first_name']) && isset($data['last_name']) && isset($data['gender']) && isset($data['email']) && isset($data['password']) && isset($data['confirm_password']) ) {
-        $first_name = htmlspecialchars($data['first_name']); // Sanitize input
-        $last_name = htmlspecialchars($data['last_name']); // Sanitize input
-        $gender = htmlspecialchars($data['gender']); // Sanitize input
-        $email = htmlspecialchars($data['email']); // Sanitize input
-        $password = htmlspecialchars($data['password']); // Sanitize input
-        $confirm_password = htmlspecialchars($data['confirm_password']); // Sanitize input
-
-        // Perform any additional processing (e.g., saving to a database)
-        // For demonstration purposes, we return a success message
+        $first_name = htmlspecialchars($data['first_name']); 
+        $last_name = htmlspecialchars($data['last_name']); 
+        $gender = htmlspecialchars($data['gender']); 
+        $email = htmlspecialchars($data['email']); 
+        $password = htmlspecialchars($data['password']); 
+        $confirm_password = htmlspecialchars($data['confirm_password']); 
 
         $user_id = rand(1, 100000000);
         while (!isunique($user_id)) {
@@ -32,7 +27,6 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
         }
 
         if (!isunique_email($email)) {
-          //echo "This Email is already registered";
           echo json_encode([
             'status' => 'error',
             'message' => 'This Email is already registered! Provide a new one.',
@@ -58,7 +52,6 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
         }
     } 
     else {
-        // If required fields are missing, return an error response
       echo json_encode([
           'status' => 'error',
           'message' => 'Invalid input. Please provide all fields.',
