@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends List</title>
+</head>
+
+<body>
+    <a href="profile.php" class="back-btn">Back</a>
+    <h1>People You May Know</h1>
+    <ul>
+        <?php
+        if (!empty($new_arr)) {
+            for ($i = 0; $i < count($new_arr); $i++) {
+                if (isset($new_arr[$i][0])) {
+                    echo '<li>';
+                    echo '<div class="friend-info">' . $new_arr[$i][1] . ' ' . $new_arr[$i][2] . '</div>';
+                    echo '<form action="" method="POST" style="display:inline;">
+                            <input type="hidden" name="friend_user_id" value="' . $new_arr[$i][0] . '">
+                            <button type="submit" name="friend_request" class="friend-request-btn">Send Friend Request</button>
+                        </form>';
+                    echo '</li>';
+
+                }
+            }
+        }
+        ?>
+
+    </ul>
+    <h1>friend requests</h1>
+    <?php
+    //$arr3=array_unique($arr3);
+    if (!empty($arr3)) {
+        for ($i = 0; $i < count($arr3); $i++) {
+
+            echo '<li>';
+            echo '<div class="friend-info">' . $arr3[$i][1] . ' ' . $arr3[$i][2] . '</div>';
+            echo '<form action="" method="POST" style="display:inline;">
+                        <input type="hidden" name="friend_user_id" value="' . $arr3[$i][0] . '">
+                        <button type="submit" name="accept_friend_request" class="friend-request-btn">Accept Friend Request</button><br><br>
+                        <button type="submit" name="reject_friend_request" class="friend-request-btn">Reject Friend Request</button>
+                    </form>';
+            echo '</li>';
+        }
+
+
+    }
+    ?>
+
+</body>
+
+</html>

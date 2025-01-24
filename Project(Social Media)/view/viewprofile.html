@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="profile-header">
+        <div class="cover-photo"></div>
+        <img src="uploads\<?php echo $profile_pic_url; ?>" Profile Picture class="profile-picture">
+        <h1><?php echo "$name" ?></h1>
+    </div>
+
+    <div class="nav-bar">
+        <a href="about.php">About</a>
+        <a href="profile.php">My Profile</a>
+        <a href="timeline.php">Timeline</a>
+    </div>
+
+    <div class="container">
+        <div class="left-sidebar">
+            <h2 class="friends-heading">Friends</h2>
+            <ul>
+                <?php
+                if (!empty($arr1)) {
+                    for ($i = 0; $i < count($arr1); $i++) {
+                        if ($user_id != $arr1[$i][0]) {
+                            echo '<li>';
+                            echo '<div class="friend-info">' . $arr1[$i][1] . ' ' . $arr1[$i][2] . '</div>';
+                            echo '<form action="" method="POST" style="display:inline;">
+                                    <input type="hidden" name="friend_user_id" value="' . $arr1[$i][0] . '">
+                                    <button type="submit" name="view_profile_btn" class="friend-request-btn">View Profile</button>
+                                </form>';
+                            echo '</li>';
+                        }
+                    }
+                }
+                ?>
+            </ul>
+            <h2 class="friends-heading">Mutual Friends</h2>
+            <ul>
+                <?php
+                if (!empty($mutual_arr)) {
+
+                    for ($i = 0; $i < count($mutual_arr); $i++) {
+                        if ($user_id != $mutual_arr[$i][0]) {
+                            echo '<li>';
+                            echo '<div class="friend-info">' . $mutual_arr[$i][1] . ' ' . $mutual_arr[$i][2] . '</div>';
+                            echo '<form action="" method="POST" style="display:inline;">
+                                    <input type="hidden" name="friend_user_id" value="' . $mutual_arr[$i][0] . '">
+                                    <button type="submit" name="view_profile_btn" class="friend-request-btn">View Profile</button>
+                                </form>';
+                            echo '</li>';
+                        }
+
+                    }
+
+
+                }
+                ?>
+            </ul>
+        </div>
+
+        <div class="main-content">
+
+
+            <?php
+            if (!empty($arr) && count($arr) > 0) {
+                $n = count($arr);
+                for ($i = $n - 1; $i >= 0; $i--) {
+                    if (isset($arr[$i][1], $arr[$i][2])) {
+                        echo '<div class="post">';
+                        echo "<h2>$name</h2>";
+                        if($arr[$i][3]!=NULL)
+                        {
+                            echo '<img src="uploads/'. $arr[$i][3] . '" width="350" height="200">';
+                        }
+                        if($arr[$i][1]!=NULL)
+                        {
+                             echo "<p>" . $arr[$i][1] . "</p>";
+                        }
+                        echo '<div class="timestamp">Posted on ' . $arr[$i][2] . '</div>';
+
+                        echo '</div>';
+
+                    }
+                }
+            }
+            ?>
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>

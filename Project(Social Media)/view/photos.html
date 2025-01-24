@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+</head>
+<body>
+<a href="profile.php" class="back-button">back</a>
+
+    <h1>Photo Gallery</h1>
+    <div class="gallery">
+    <?php
+    if (!empty($photos_arr)) {
+        for ($i = 0; $i < count($photos_arr); $i++) {
+            echo '<img src="uploads/' . $photos_arr[$i][0]. '" width="300" height="150">';
+        }
+    } else {
+        echo '<p>No photos available.</p>';
+    }
+    ?>
+        
+    </div>
+    
+</body>
+</html>

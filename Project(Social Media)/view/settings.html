@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="settings.css">
+</head>
+
+<body>
+    <a href="../controller/profile.php" class="back-btn">Back</a>
+    <div class="container">
+        <h1>Settings</h1>
+
+        <div class="section">
+            <h2>Change Password</h2>
+            <h5 id="response2"></h5>
+            <form  id="change_pass_form">
+                <div class="form-group">
+                    <label for="current_password">Current Password</label>
+                    <input type="password" id="current_password" name="current_password" placeholder="Enter your current password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="new_password">New Password</label>
+                    <input type="password" id="new_password" name="new_password" placeholder="Enter a new password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm New Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password"  placeholder="Confirm your new password" required>
+                </div>
+
+                <button type="submit" name="change_password">Change Password</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Update Profile Information</h2>
+            <h5 id="response3"></h5>
+            <form id="change_first_name_form">
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" placeholder="Enter your first name">
+                    <button type="submit" name="change_first_name">Change First Name</button>
+            </form>
+        </div>
+        <h5 id="response4"></h5>
+        <form id="change_last_name_form">
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" placeholder="Enter your last name">
+                <button type="submit" name="change_last_name">Change Last Name</button>
+        </form>
+    </div>
+    <form >
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email">
+            <button type="submit" name="change_email">Change email</button>
+    </form>
+    </div>
+
+    </div>
+    </div>
+    <script src="change_password_form.js"></script>
+    <script src="change_first_name_form.js"></script>
+    <script src="change_last_name_form.js"></script>
+</body>
+
+</html>
