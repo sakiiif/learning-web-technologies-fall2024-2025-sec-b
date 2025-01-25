@@ -102,7 +102,7 @@ $profile_pic_url=show_profile_pic($user_id);
 
     <div class="nav-bar">
         <a href="timeline.php">Timeline</a>
-        <a href="../view/about.html">About</a>
+        <a href="about.php">About</a>
         <a href="friends.php">Friends</a>
         <a href="photos.php">Photos</a>
         <a href="../view/settings.html">Settings</a>
