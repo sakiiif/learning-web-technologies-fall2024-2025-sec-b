@@ -753,6 +753,7 @@ function show_profile_pic($user_id)
     }
      
 }
+
 function update_about($user_id,$dob,$city,$bio,$address,$relationship,$country,$edu)
 {
     $conn=getConnection();
@@ -760,16 +761,45 @@ function update_about($user_id,$dob,$city,$bio,$address,$relationship,$country,$
     {
         die("Connection failed: " . mysqli_connect_error());
     }
-    $sql="UPDATE user_info 
-            SET dob = '$dob', city = '$city', bio = '$bio', address = '$address', 
-                relationship = '$relationship', country = '$country', edu = '$edu' 
-            WHERE user_id = $user_id";
+    $sql="UPDATE user_info SET dob = '$dob', 
+    city = '$city', 
+    bio = '$bio', 
+    address = '$address', 
+    relationship = '$relationship', 
+    country = '$country', 
+    edu = '$edu'
+    WHERE user_id = $user_id ";
     
     $result = mysqli_query($conn, $sql);
+    mysqli_close($conn);
      if ($result) {
         return true;
     } else {
         return false;
     }
 }
+
+function show_about_info($user_id)
+{
+    $conn=getConnection();
+    if(!$conn)
+    {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+   $sql= "SELECT dob, city, bio, address, relationship, country, edu FROM user_info WHERE user_id = $user_id";
+   $result = mysqli_query($conn, $sql);
+   $arr=[];
+   while ($row = $result->fetch_assoc()) 
+   {
+       $arr[]= array($row['dob'], $row['city'],$row['bio'],$row['address'],$row['relationship'],$row['country'], $row['edu']);
+   }
+   if(count($arr)>0)
+   {
+       return $arr;
+   }
+
+}
+
+
 ?>
